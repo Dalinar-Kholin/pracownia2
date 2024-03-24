@@ -7,10 +7,10 @@ interface IItemListMaker{
     visible : boolean
     items : Item[]
     setListItems : React.Dispatch<React.SetStateAction<Item[]>>
-
+    paggingInt : number
 }
 
-export default function ItemListMaker({filter,visible,items,setListItems}:IItemListMaker) {
+export default function ItemListMaker({filter,visible,items,setListItems, paggingInt}:IItemListMaker) {
     return(
         <>
             {items
@@ -22,6 +22,7 @@ export default function ItemListMaker({filter,visible,items,setListItems}:IItemL
                 (i: Item) =>
                     i.name.includes(filter)
             )
+            .slice(10*paggingInt,10*paggingInt+10 > items.length ?items.length : 10*paggingInt+10)
             .map(i => <ListItem
                 key={i.name}
                 item={i}

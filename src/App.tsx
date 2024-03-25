@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import './App.css';
 import Header from "./components/Header";
 import Item from "./classes/Item";
@@ -8,27 +8,35 @@ import PaggingButton from "./components/paggingButton";
 
 function App() {
     const inicialList: Item[] = [
-        new Item(false, "nice"),
-        new Item(true, "kinda"),
-        new Item(true, "gut"),
-        new Item(true, "gut1"),
-        new Item(true, "gut2"),
-        new Item(true, "gut3"),
-        new Item(true, "gut4"),
-        new Item(true, "gut5"),
-        new Item(true, "gut6"),
-        new Item(true, "gut7"),
-        new Item(true, "gut8"),
-        new Item(true, "gut9"),
-        new Item(true, "gut10"),
+        new Item(false, "nice", new Date().getTime()),
+        new Item(true, "kinda",new Date().getTime()),
+        new Item(true, "gut",new Date().getTime()),
+        new Item(true, "gut1", new Date().getTime()),
+        new Item(true, "gut2", new Date().getTime()),
+        new Item(true, "gut3", new Date().getTime()),
+        new Item(true, "gut4", new Date().getTime()),
+        new Item(true, "gut5", new Date().getTime()),
+        new Item(true, "gut6", new Date().getTime()),
+        new Item(true, "gut7", new Date().getTime()),
+        new Item(true, "gut8", new Date().getTime()),
+        new Item(true, "gut9", new Date().getTime()),
+        new Item(true, "gut10",new Date().getTime()),
 
     ]
     const [showDone, setShowDone] = useState<boolean>(false)
     const [filter, setFilter] = useState<string>("")
     const [listItems, setListItems] = useState<Item[]>(inicialList)
     const [paggingInt, setPaggingInt] = useState(0)
+    const [value, setValue] = useState('');
+
+    const toggle = () => {
+        setShowDone(!showDone)
+    };
+
+
     return (
         <div className="App">
+
             <Header content={"To Do List"}/>
             <AddItem
                 compName={"add item"}
@@ -39,6 +47,7 @@ function App() {
                     } else {
                         setListItems([i, ...listItems])
                     }
+
                 }}/>
             <AddItem
                 compName={"filter"}
@@ -47,21 +56,32 @@ function App() {
                     setFilter(i.name)
 
                 }}/>
-            <button style={{borderRadius: '10px'}} onClick={() => {
-                setShowDone(!showDone)
-            }}>
-                show done := {showDone ? "true" : "false"}
+            <h3>sort type</h3>
+            <input type="radio" id="alfabetical" name="sortType" value="alfabetical"/>
+            <label htmlFor="alfabetical" onClick={() => setValue("alfa")}>alfabetical</label><br/>
+            <input type="radio" id="reversAlfa" name="sortType" value="malejąco alfabetycznie"/>
+            <label htmlFor="reversAlfa" onClick={() => setValue("rev")} >malejąco alfabetycznie</label><br/>
+            <input type="radio" id="default" name="sortType" value="default"/>
+            <label htmlFor="default" onClick={() => setValue("def")}>default</label>
+
+            <p></p>
+            <div className={"showDoneClass"}>
+            <div>czy pokazywać zrobione</div>
+            <button onClick={toggle} style={{borderRadius: "10px"}}>
+                {showDone ? 'Prawda' : 'Fałsz'}
             </button>
-            <ItemListMaker filter={filter} visible={showDone} items={listItems} setListItems={setListItems} paggingInt={paggingInt}/>
+            </div>
+            <ItemListMaker filter={filter} visible={showDone} items={listItems} setListItems={setListItems}
+                           paggingInt={paggingInt} sortType={value}/>
             <PaggingButton
-                sub={()=> {
+                sub={() => {
                     setPaggingInt(paggingInt === 0 ? 0 : paggingInt - 1)
                 }}
-                add={()=>{
-                    const len = Math.round(listItems.filter((i: Item) =>
+                add={() => {
+                    const len =( (Math.round(listItems.filter((i: Item) =>
                         i.isDone ? true :
-                            showDone).length/10)-1
-                    setPaggingInt( paggingInt>=len ? len+1 : paggingInt +1)
+                            showDone).length) * 10 /10))
+                    setPaggingInt((paggingInt+1)*10<=len-1 ?(paggingInt+ 1) : paggingInt)
 
                 }}
                 len={listItems.filter((i: Item) =>
@@ -73,5 +93,6 @@ function App() {
         </div>
     );
 }
+
 //
 export default App;

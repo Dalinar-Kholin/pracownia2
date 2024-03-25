@@ -19,7 +19,8 @@ export default function AddItem({compName,buttonName,add} : IAddItem){
                 style={{borderRadius: '15px'}}
                 onSubmit={(e) => {
                     e.preventDefault();
-                    add(new Item(true, input))
+                    add(new Item(true, input ,new Date().getTime()))
+                    setInput("")
                 }}
                 className={input==="" ? "hidden" : ""}
             >

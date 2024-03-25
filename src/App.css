@@ -33,8 +33,14 @@ body{
   border-radius: 10px;
   color: black;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  margin: 10px;
+}
+
+.showDoneClass{
+  gap: 10px;
+  padding: 5px;
   margin: 10px;
 }
 

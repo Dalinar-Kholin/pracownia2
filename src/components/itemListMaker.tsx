@@ -8,9 +8,10 @@ interface IItemListMaker{
     items : Item[]
     setListItems : React.Dispatch<React.SetStateAction<Item[]>>
     paggingInt : number
+    sortType : string
 }
 
-export default function ItemListMaker({filter,visible,items,setListItems, paggingInt}:IItemListMaker) {
+export default function ItemListMaker({filter,visible,items,setListItems, paggingInt, sortType}:IItemListMaker) {
     return(
         <>
             {items
@@ -23,6 +24,7 @@ export default function ItemListMaker({filter,visible,items,setListItems, paggin
                     i.name.includes(filter)
             )
             .slice(10*paggingInt,10*paggingInt+10 > items.length ?items.length : 10*paggingInt+10)
+                .sort(sortType === "def" ? (a, b )=> (b.date - a.date) : (sortType === "alfa" ? (a, b ) => a.name.localeCompare(b.name) : (a, b ) => -a.name.localeCompare(b.name)))
             .map(i => <ListItem
                 key={i.name}
                 item={i}
